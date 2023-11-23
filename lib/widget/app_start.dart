@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelsync_client/widget/groupmainpage.dart';
 import 'package:travelsync_client/widget/loginpage.dart';
 import 'package:travelsync_client/widget/mainloading.dart';
 import 'package:travelsync_client/widget/buildGroup.dart';
@@ -9,7 +10,7 @@ class AppStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: BuildGroup(),
+      home: GroupMainPage(),
     );
   }
 }
