@@ -23,7 +23,6 @@ class BuildGroupState extends State<BuildGroup> {
   final TextEditingController nationController = TextEditingController();
   final TextEditingController tourCompanyController = TextEditingController();
   final TextEditingController groupPasswordController = TextEditingController();
-
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
   late String userToken;

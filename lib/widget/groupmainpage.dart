@@ -16,7 +16,9 @@ class _GroupMainPageState extends State<GroupMainPage> {
   late String startFormat = DateFormat('yyyy-MM-dd').format(startDate);
   DateTime endDate = DateTime(2099, 12, 31);
   late String endFormat = DateFormat('yyyy-MM-dd').format(endDate);
-  late GroupInfo groupinfo;
+  late GroupDetail groupdetail;
+  late GuideInfo guideInfo;
+  late int groupId;
 
   void addNotice() {}
   void importPlan() {}
@@ -25,7 +27,7 @@ class _GroupMainPageState extends State<GroupMainPage> {
   void viewGuideLocation() {}
 
   void waitForGroupInfo() async {
-    // groupinfo = await GroupApi.getGroupInfo(groupId);
+    // groupdetail = GroupApi.getGroupInfo(groupId);
   }
 
   @override
@@ -51,14 +53,14 @@ class _GroupMainPageState extends State<GroupMainPage> {
                   height: 50,
                 ),
                 Text(
-                  groupinfo.agencyName,
+                  groupdetail.tourCompany,
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  groupinfo.groupName,
+                  groupdetail.groupName,
                   style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.w600,
@@ -89,7 +91,7 @@ class _GroupMainPageState extends State<GroupMainPage> {
                   children: [
                     const Icon(Icons.person, size: 12),
                     Text(
-                      "가이드 ${groupinfo.guideName} ${groupinfo.guidePhone}",
+                      "가이드 ${groupdetail.guide} ${guideInfo.phone}",
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -296,20 +298,36 @@ class _GroupMainPageState extends State<GroupMainPage> {
   }
 }
 
-class GroupInfo {
+class GroupDetail {
+  final int groupId;
+  final String guide;
   final String groupName;
   final DateTime startDate;
   final DateTime endDate;
-  final String guideName;
-  final String guidePhone;
-  final String agencyName;
+  final String nation;
+  final String tourCompany;
+  bool toggleLoc;
+  final int tourId;
 
-  GroupInfo({
-    required this.groupName,
-    required this.startDate,
-    required this.endDate,
-    required this.guideName,
-    required this.guidePhone,
-    required this.agencyName,
-  });
+  GroupDetail.fromJson(Map<String, dynamic> json)
+      : groupId = json['groupId'],
+        guide = json['guide'],
+        groupName = json['groupName'],
+        startDate = json['startDate'],
+        endDate = json['endDate'],
+        nation = json['nation'],
+        tourCompany = json['tourCompany'],
+        toggleLoc = json['toggleLoc'],
+        tourId = json['tourId'];
+}
+
+class GuideInfo {
+  final String userId;
+  final String name;
+  final String phone;
+
+  GuideInfo.fromJson(Map<String, dynamic> json)
+      : userId = json['userId'],
+        name = json['name'],
+        phone = json['phone'];
 }
