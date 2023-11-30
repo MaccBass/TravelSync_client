@@ -3,7 +3,11 @@ class Login {
   final String password;
   final String userId;
 
-  Login(this.accountName, this.password, this.userId);
+  Login(
+    this.accountName,
+    this.password,
+    this.userId,
+  );
 
   Login.fromJson(Map<String, dynamic> json)
       : accountName = json['accountName'],

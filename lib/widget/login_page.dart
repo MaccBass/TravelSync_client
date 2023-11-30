@@ -4,9 +4,11 @@ import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
 
 import 'package:travelsync_client/models/model.dart';
+import 'package:travelsync_client/widget/home_page.dart';
 import 'package:travelsync_client/widget/join.dart';
 import 'package:travelsync_client/widget/logout.dart';
 import 'package:travelsync_client/widget/login_widget_group.dart';
+import 'package:travelsync_client/widget/settings_page.dart';
 
 class StartingPage extends StatelessWidget {
   const StartingPage({super.key});
@@ -17,8 +19,9 @@ class StartingPage extends StatelessWidget {
       initialRoute: '/', // 앱이 시작될 때 보여질 화면
       routes: {
         '/service': (context) => const ServicePage(),
-        '/main': (context) => const ServicePage(),
         '/join': (context) => const JoinPage(),
+        '/main': (context) => const HomePage(),
+        '/main/settings': (context) => const SettingsPage(),
       },
       home: const LoginPage(),
     );
@@ -74,9 +77,9 @@ class _LoginPageState extends State<LoginPage> {
           await dio.post('http://34.83.150.5:8080/user/login', data: param);
 
       if (response.statusCode == 200) {
-        final jsonBody = json.decode(response.data['userId'].toString());
+        final userId = json.decode(response.data['userId'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(Login('$accountName', '$password', '$jsonBody'));
+        var val = jsonEncode(Login('$accountName', '$password', '$userId'));
 
         await storage.write(
           key: 'login',
@@ -188,8 +191,15 @@ class _LoginPageState extends State<LoginPage> {
                         true) {
                       print('로그인 성공');
                       Navigator.pushNamed(
-                          context, '/service'); // 로그인 이후 서비스 화면으로 이동
+                          context, '/main'); // 로그인 이후 서비스 화면으로 이동
                     } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('로그인에 실패했습니다.'),
+                          duration:
+                              Duration(seconds: 1), // SnackBar가 표시되는 시간 설정
+                        ),
+                      );
                       print('로그인 실패');
                     }
                   },
