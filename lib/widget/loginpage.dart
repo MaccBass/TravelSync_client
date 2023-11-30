@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travelsync_client/widget/loginWidgetGroup.dart';
+//import '../widget/loginWidgetGroup.dart';
 
 class Loginpage extends StatelessWidget {
   const Loginpage({super.key});
