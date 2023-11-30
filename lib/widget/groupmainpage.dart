@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:travelsync_client/service/group_api.dart';
 import 'package:travelsync_client/widgets/header.dart';
 
 class GroupMainPage extends StatefulWidget {
@@ -24,13 +25,7 @@ class _GroupMainPageState extends State<GroupMainPage> {
   void viewGuideLocation() {}
 
   void waitForGroupInfo() async {
-    groupinfo = GroupInfo(
-        groupName: "현성이와 아이들",
-        startDate: startDate,
-        endDate: endDate,
-        guideName: "조현성",
-        guidePhone: "010-1234-5678",
-        agencyName: "DGU투어");
+    // groupinfo = await GroupApi.getGroupInfo(groupId);
   }
 
   @override
