@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:travelsync_client/widget/settings_page.dart'; // flutter_secure_storage 패키지
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,18 +13,10 @@ class _HomePageState extends State<HomePage> {
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
 
-  logout() async {
-    await storage.delete(key: 'login');
-    Navigator.pushNamed(context, '/');
-  }
-
   checkUserState() async {
     userInfo = await storage.read(key: 'login');
     if (userInfo == null) {
-      print('로그인 페이지로 이동');
       Navigator.pushNamed(context, '/'); // 로그인 페이지로 이동
-    } else {
-      print('로그인 중');
     }
   }
 

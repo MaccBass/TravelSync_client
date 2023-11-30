@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_
 import 'package:travelsync_client/models/model.dart';
 import 'package:travelsync_client/widget/home_page.dart';
 import 'package:travelsync_client/widget/join.dart';
-import 'package:travelsync_client/widget/logout.dart';
 import 'package:travelsync_client/widget/login_widget_group.dart';
 import 'package:travelsync_client/widget/settings_page.dart';
 
@@ -18,7 +17,6 @@ class StartingPage extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/', // 앱이 시작될 때 보여질 화면
       routes: {
-        '/service': (context) => const ServicePage(),
         '/join': (context) => const JoinPage(),
         '/main': (context) => const HomePage(),
         '/main/settings': (context) => const SettingsPage(),
@@ -62,8 +60,6 @@ class _LoginPageState extends State<LoginPage> {
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
     if (userInfo != null) {
       Navigator.pushNamed(context, '/main');
-    } else {
-      print('로그인이 필요합니다');
     }
   }
 
@@ -77,9 +73,14 @@ class _LoginPageState extends State<LoginPage> {
           await dio.post('http://34.83.150.5:8080/user/login', data: param);
 
       if (response.statusCode == 200) {
-        final userId = json.decode(response.data['userId'].toString());
+        Map<String, dynamic> jsonDataMap = response.data;
+        // "accessToken" 값을 추출
+        String accessToken = jsonDataMap['accessToken'];
+        String refreshToken = jsonDataMap['refreshToken'];
+
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(Login('$accountName', '$password', '$userId'));
+        var val = jsonEncode(
+            Login('$accountName', '$password', accessToken, refreshToken));
 
         await storage.write(
           key: 'login',
@@ -189,7 +190,6 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () async {
                     if (await loginAction(username.text, password.text) ==
                         true) {
-                      print('로그인 성공');
                       Navigator.pushNamed(
                           context, '/main'); // 로그인 이후 서비스 화면으로 이동
                     } else {
@@ -200,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
                               Duration(seconds: 1), // SnackBar가 표시되는 시간 설정
                         ),
                       );
-                      print('로그인 실패');
                     }
                   },
                   child: Container(

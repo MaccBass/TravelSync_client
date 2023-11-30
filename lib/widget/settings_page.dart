@@ -21,10 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   checkUserState() async {
     userInfo = await storage.read(key: 'login');
     if (userInfo == null) {
-      print('로그인 페이지로 이동');
       Navigator.pushNamed(context, '/'); // 로그인 페이지로 이동
-    } else {
-      print('로그인 중');
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travelsync_client/widget/login_page.dart';
 
 class UserProvider extends ChangeNotifier {
   String _userName = ""; //이름
