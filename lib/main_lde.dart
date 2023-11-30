@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:travelsync_client/tour/tourHome.dart';
 import '../logo/logoHeader.dart';
 import '../widgets/button.dart';
 import '../widgets/header.dart';
 import '../tour/createTour.dart';
-import '../tour/emptyTour.dart';
 
 void main() {
   runApp(const App());
@@ -28,7 +28,7 @@ class App extends StatelessWidget {
             SizedBox(height: 40),
             Header(textHeader: 'TOUR List'), //title
             SizedBox(height: 70),
-            NoTourMessage(),
+            TourHome(),
             SizedBox(height: 200),
             Buttons(
               text1: 'TOUR 만들기',

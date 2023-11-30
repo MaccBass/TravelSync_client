@@ -7,15 +7,20 @@ class LogoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              Icon(
-                Icons.arrow_back,
-                size: 40,
-              ), //나중에 값 넣기 Icon.switch(expression)
-            ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context); //블랙화면 나옴
+            },
+            child: const Column(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  size: 40,
+                ),
+              ],
+            ),
           ),
         ),
         Padding(
