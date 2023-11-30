@@ -93,3 +93,28 @@ class Email extends StatelessWidget {
     );
   }
 }
+
+class HalfLine extends StatelessWidget {
+  const HalfLine({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 359,
+          decoration: const ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                width: 1,
+                strokeAlign: BorderSide.strokeAlignCenter,
+                color: Color(0xFFCACACA),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
