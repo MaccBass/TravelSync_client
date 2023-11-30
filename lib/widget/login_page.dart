@@ -4,9 +4,10 @@ import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
 
 import 'package:travelsync_client/models/model.dart';
+import 'package:travelsync_client/widget/home_page.dart';
 import 'package:travelsync_client/widget/join.dart';
-import 'package:travelsync_client/widget/logout.dart';
 import 'package:travelsync_client/widget/login_widget_group.dart';
+import 'package:travelsync_client/widget/settings_page.dart';
 
 class StartingPage extends StatelessWidget {
   const StartingPage({super.key});
@@ -16,9 +17,9 @@ class StartingPage extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/', // 앱이 시작될 때 보여질 화면
       routes: {
-        '/service': (context) => const ServicePage(),
-        '/main': (context) => const ServicePage(),
         '/join': (context) => const JoinPage(),
+        '/main': (context) => const HomePage(),
+        '/main/settings': (context) => const SettingsPage(),
       },
       home: const LoginPage(),
     );
@@ -59,8 +60,6 @@ class _LoginPageState extends State<LoginPage> {
     // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
     if (userInfo != null) {
       Navigator.pushNamed(context, '/main');
-    } else {
-      print('로그인이 필요합니다');
     }
   }
 
@@ -70,49 +69,30 @@ class _LoginPageState extends State<LoginPage> {
       var dio = Dio();
       var param = {'userId': '$accountName', 'password': '$password'};
 
-      Response response = await dio.post('로그인 API URL', data: param);
+      Response response =
+          await dio.post('http://34.83.150.5:8080/user/login', data: param);
 
       if (response.statusCode == 200) {
-        final jsonBody = json.decode(response.data['userId'].toString());
+        Map<String, dynamic> jsonDataMap = response.data;
+        // "accessToken" 값을 추출
+        String accessToken = jsonDataMap['accessToken'];
+        String refreshToken = jsonDataMap['refreshToken'];
+
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(Login('$accountName', '$password', '$jsonBody'));
+        var val = jsonEncode(
+            Login('$accountName', '$password', accessToken, refreshToken));
 
         await storage.write(
           key: 'login',
           value: val,
         );
-        print('접속 성공!');
+        //print('접속 성공!');
         return true;
       } else {
-        print('error');
+        //print('error');
         return false;
       }
     } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> mockLoginAction(String accountName, String password) async {
-    try {
-      // 더미 응답 데이터 생성
-      Map<String, dynamic> dummyResponse = generateDummyLoginResponse('123456');
-
-      if (dummyResponse['status'] == 200) {
-        final jsonBody = dummyResponse['accessToken'].toString();
-        var val = jsonEncode(Login(accountName, password, jsonBody));
-
-        await storage.write(
-          key: 'login',
-          value: val,
-        );
-        print('가상 로그인 성공!');
-        return true;
-      } else {
-        print('가상 로그인 실패');
-        return false;
-      }
-    } catch (e) {
-      print('가상 로그인 에러: $e');
       return false;
     }
   }
@@ -208,13 +188,18 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: InkWell(
                   onTap: () async {
-                    if (await mockLoginAction(username.text, password.text) ==
+                    if (await loginAction(username.text, password.text) ==
                         true) {
-                      print('로그인 성공');
                       Navigator.pushNamed(
-                          context, '/service'); // 로그인 이후 서비스 화면으로 이동
+                          context, '/main'); // 로그인 이후 서비스 화면으로 이동
                     } else {
-                      print('로그인 실패');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('로그인에 실패했습니다.'),
+                          duration:
+                              Duration(seconds: 1), // SnackBar가 표시되는 시간 설정
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -289,15 +274,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-//더미 데이터 생성하는 로직들
-// 가상의 더미 로그인 응답을 생성하는 함수
-Map<String, dynamic> generateDummyLoginResponse(String userId) {
-  return {
-    'status': 200,
-    'accessToken': 'xxxxxx.yyyyyyy.kkkkkkk',
-    'refreshToken': 'xxxxxx.yyyyyy.kkkkkkk',
-    // 다른 필요한 응답 데이터도 추가할 수 있습니다.
-  };
 }
