@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class Buttons extends StatelessWidget {
   final String text1; //왼쪽버튼
   final String text2; //오른쪽버튼
-  final Widget link1; //왼쪽버튼을 눌렀을 시 이동할 class
-  final Widget link2; //오른쪽버튼을 눌렀을 시 이동할 class
+  final Widget moveTo1; //왼쪽버튼을 눌렀을 시 이동할 class
+  final Widget moveTo2; //오른쪽버튼을 눌렀을 시 이동할 class
 
   const Buttons({
     Key? key,
     required this.text1,
     required this.text2,
-    required this.link1,
-    required this.link2,
+    required this.moveTo1,
+    required this.moveTo2,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class Buttons extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => link1),
+                MaterialPageRoute(builder: (context) => moveTo1),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -61,7 +61,7 @@ class Buttons extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => link2),
+                MaterialPageRoute(builder: (context) => moveTo2),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -94,18 +94,20 @@ class Buttons extends StatelessWidget {
 }
 
 /* 버튼 중앙 1개 */
-/* 변수:text, link, buttonColor 세 개임 */
+/* 변수:text, onPressed(), buttonColor, width 4 개임 */
 /* 회원 탈퇴 등은 회색임 */
 class Button extends StatelessWidget {
   final String text;
-  final Widget link;
+  final Function onPressed;
   final Color buttonColor;
+  final double width; //버튼 크기
 
   const Button({
     Key? key,
     required this.text,
-    required this.link,
+    required this.onPressed,
     required this.buttonColor,
+    required this.width,
   }) : super(key: key);
 
   @override
@@ -114,12 +116,12 @@ class Button extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          width: 160,
+          width: width,
           child: ElevatedButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => link),
+                MaterialPageRoute(builder: (context) => onPressed()),
               );
             },
             style: ElevatedButton.styleFrom(
