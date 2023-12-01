@@ -39,12 +39,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text('Main'),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
               tooltip: 'logout',
+              color: Colors.black,
               onPressed: () {
                 logout();
               },
