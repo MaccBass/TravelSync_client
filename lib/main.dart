@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Tour.dart';
+import 'package:travelsync_client/widget/app_start.dart';
 
 void main() {
-  runApp(const Tour());
+  runApp(const AppStart());
 }
