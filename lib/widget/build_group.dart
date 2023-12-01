@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:travelsync_client/widget/groupmainpage.dart';
+import 'package:travelsync_client/widget/group_main_page.dart';
 import 'package:travelsync_client/widgets/header.dart';
 import 'package:http/http.dart' as http;
 
-class BuildGroup extends StatefulWidget {
-  const BuildGroup({super.key});
+class GroupCreatePage extends StatefulWidget {
+  const GroupCreatePage({super.key});
 
   @override
-  State<BuildGroup> createState() => BuildGroupState();
+  State<GroupCreatePage> createState() => GroupCreatePageState();
 }
 
-class BuildGroupState extends State<BuildGroup> {
+class GroupCreatePageState extends State<GroupCreatePage> {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   final TextEditingController groupNameController = TextEditingController();
@@ -22,7 +22,7 @@ class BuildGroupState extends State<BuildGroup> {
   final TextEditingController groupPasswordController = TextEditingController();
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
-
+/*
   checkUserState() async {
     userInfo = await storage.read(key: 'login');
     if (userInfo == null) {
@@ -39,7 +39,7 @@ class BuildGroupState extends State<BuildGroup> {
       checkUserState();
     });
   }
-
+*/
   // 그룹 생성 버튼 누를시
   void createGroup() async {
     if (groupNameController.text.isEmpty) {
@@ -162,6 +162,9 @@ class BuildGroupState extends State<BuildGroup> {
           },
           body: body);
       if (response.statusCode == 200) {
+        if (!mounted) return;
+        var responseBody = jsonDecode(response.body);
+        int groupId = responseBody["groupId"];
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -173,24 +176,64 @@ class BuildGroupState extends State<BuildGroup> {
                   child: const Text("닫기"),
                   onPressed: () {
                     Navigator.pop(context);
+                    /*
+                    Future.microtask(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  GroupMainPage(groupId: groupId)));
+                    });
+                    */
                   },
                 ),
               ],
             );
           },
         );
+
+        return;
+      } else {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              content: const Text("http 통신 오류"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("닫기"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+        return;
       }
     } catch (e) {
-      print("api오류.");
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("api오류"),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
-  }
-
-  void goGroupMainPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const GroupMainPage(),
-        ));
   }
 
   // 시작/종료일 지정
