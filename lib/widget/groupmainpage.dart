@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:travelsync_client/service/group_api.dart';
 import 'package:travelsync_client/widgets/header.dart';
 
 class GroupMainPage extends StatefulWidget {
@@ -16,9 +15,7 @@ class _GroupMainPageState extends State<GroupMainPage> {
   late String startFormat = DateFormat('yyyy-MM-dd').format(startDate);
   DateTime endDate = DateTime(2099, 12, 31);
   late String endFormat = DateFormat('yyyy-MM-dd').format(endDate);
-  late GroupDetail groupdetail;
-  late GuideInfo guideInfo;
-  late int groupId;
+  late GroupInfo groupinfo;
 
   void addNotice() {}
   void importPlan() {}
@@ -27,7 +24,13 @@ class _GroupMainPageState extends State<GroupMainPage> {
   void viewGuideLocation() {}
 
   void waitForGroupInfo() async {
-    // groupdetail = GroupApi.getGroupInfo(groupId);
+    groupinfo = GroupInfo(
+        groupName: "현성이와 아이들",
+        startDate: startDate,
+        endDate: endDate,
+        guideName: "조현성",
+        guidePhone: "010-1234-5678",
+        agencyName: "DGU투어");
   }
 
   @override
@@ -53,14 +56,14 @@ class _GroupMainPageState extends State<GroupMainPage> {
                   height: 50,
                 ),
                 Text(
-                  groupdetail.tourCompany,
+                  groupinfo.agencyName,
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  groupdetail.groupName,
+                  groupinfo.groupName,
                   style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.w600,
@@ -91,7 +94,7 @@ class _GroupMainPageState extends State<GroupMainPage> {
                   children: [
                     const Icon(Icons.person, size: 12),
                     Text(
-                      "가이드 ${groupdetail.guide} ${guideInfo.phone}",
+                      "가이드 ${groupinfo.guideName} ${groupinfo.guidePhone}",
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -298,36 +301,20 @@ class _GroupMainPageState extends State<GroupMainPage> {
   }
 }
 
-class GroupDetail {
-  final int groupId;
-  final String guide;
+class GroupInfo {
   final String groupName;
   final DateTime startDate;
   final DateTime endDate;
-  final String nation;
-  final String tourCompany;
-  bool toggleLoc;
-  final int tourId;
+  final String guideName;
+  final String guidePhone;
+  final String agencyName;
 
-  GroupDetail.fromJson(Map<String, dynamic> json)
-      : groupId = json['groupId'],
-        guide = json['guide'],
-        groupName = json['groupName'],
-        startDate = json['startDate'],
-        endDate = json['endDate'],
-        nation = json['nation'],
-        tourCompany = json['tourCompany'],
-        toggleLoc = json['toggleLoc'],
-        tourId = json['tourId'];
-}
-
-class GuideInfo {
-  final String userId;
-  final String name;
-  final String phone;
-
-  GuideInfo.fromJson(Map<String, dynamic> json)
-      : userId = json['userId'],
-        name = json['name'],
-        phone = json['phone'];
+  GroupInfo({
+    required this.groupName,
+    required this.startDate,
+    required this.endDate,
+    required this.guideName,
+    required this.guidePhone,
+    required this.agencyName,
+  });
 }
