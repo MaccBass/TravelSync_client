@@ -30,12 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_secure_storage: ^5.0.3
-  dio: ^4.0.6
-  provider: ^6.1.1
-  geolocator: ^10.1.0
-  sqflite: ^2.3.0
-  http: ^1.1.0
+  http: ^0.13.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -65,10 +60,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/tour.png
+    - assets/images/airplane_travelsync.png
     - assets/images/Logo_earth.png
     - assets/images/logo_sentence.png
-    - assets/images/airplane_travelsync.png
-    - assets/images/group_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

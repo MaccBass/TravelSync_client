@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travelsync_client/widget/login_page.dart';
+import 'package:travelsync_client/widget/loginpage.dart';
 import 'package:travelsync_client/widget/mainloading.dart';
 
 class AppStart extends StatelessWidget {
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const StartingPage(),
+          builder: (context) => const Loginpage(),
         ),
       );
     });
