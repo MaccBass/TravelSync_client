@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travelsync_client/widget/join.dart';
 import 'package:travelsync_client/widget/login_page.dart';
 import 'package:travelsync_client/widget/mainloading.dart';
 
