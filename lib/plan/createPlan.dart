@@ -1,29 +1,33 @@
+/*API 연동 중*/
 import 'package:flutter/material.dart';
-import '../main.dart';
 import '../widgets/button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Plan extends StatelessWidget {
-  Plan({Key? key}) : super(key: key);
+  Plan({Key? key, required this.dayCount}) : super(key: key);
+  final int dayCount;
   final TextEditingController timeController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
+  void _onDayPressed(int day) {
+    Text('Day$day');
+  }
+
   Future<void> addPlan(String time, String place, String content) async {
     // 실제 API 엔드포인트로 교체하세요
-    final apiUrl = Uri.parse('http://alexport.net:8080/tour');
+    final apiUrl = Uri.parse('http://34.83.150.5:8080/tour');
 
     final headers = {
-      'Content-Type': 'application/json',
       'Authorization':
           'Bearer eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDY1MTAxNDYsInN1YiI6ImxkZSIsInR5cGUiOiJBQ0NFU1MifQ.0iicmLOf8iWcZGHlW62NHsdvNllBLQjw3h7kx9FXeJbSWriQieyVChgHImB3aHAb28FVdVco5-DRSxbjbbDK4A',
+      'Content-Type': 'application/json',
     };
-
     final payload = {
       'time': time,
-      'place': place,
-      'content': content,
+      'planTitle': content,
+      'planContent': content,
     };
 
     try {
@@ -49,24 +53,33 @@ class Plan extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SingleChildScrollView(), ////////
-        //planDay
-        const Row(
+        const SingleChildScrollView(),
+        // planDay
+        Row(
           children: [
-            SingleChildScrollView(),
-            Padding(
-              padding: EdgeInsets.only(left: 30),
-              child: Text(
-                'Day 1',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
+            GestureDetector(
+              onTap: () {
+                _onDayPressed(dayCount);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Container(
+                  width: 80,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  color: Colors.white,
+                  child: Text(
+                    'Day$dayCount',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ),
             ),
-            SizedBox(width: 4),
-            Icon(
+            const Icon(
               Icons.add_circle_outline,
               size: 24,
               color: Color.fromARGB(255, 0, 110, 200),
@@ -74,6 +87,7 @@ class Plan extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
+
         //time
         Row(
           children: [

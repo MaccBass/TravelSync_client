@@ -1,8 +1,9 @@
+/*API 연동 중*/
 import 'package:flutter/material.dart';
 import '../logo/logoHeader.dart';
 import '../widgets/header.dart';
 import '../plan/createPlan.dart';
-//////
+//////API/////
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -28,7 +29,7 @@ class _CreateTourState extends State<CreateTour> {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            const SingleChildScrollView(), //////////
+            const SingleChildScrollView(),
             const SizedBox(height: 60),
             const LogoHeader(),
             const SizedBox(height: 30),
@@ -36,9 +37,12 @@ class _CreateTourState extends State<CreateTour> {
             const SizedBox(height: 30),
             const TourName(),
             const SizedBox(height: 20),
-            const Divider(
-              thickness: 1.0,
-              color: Color.fromARGB(255, 10, 124, 218),
+            const SizedBox(
+              width: 386,
+              child: Divider(
+                thickness: 2.0,
+                color: Color.fromARGB(255, 187, 214, 255),
+              ),
             ),
             SizedBox(
               height: 30,
@@ -50,17 +54,24 @@ class _CreateTourState extends State<CreateTour> {
                       child: Row(
                         children: [
                           for (int i = 1; i <= dayCount; i++)
-                            Container(
-                              width: 80,
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              color: Colors.white,
-                              child: Text(
-                                'Day$i',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
+                            GestureDetector(
+                              onTap: () {
+                                Text('DDay$i');
+                              },
+                              child: Container(
+                                width: 80,
+                                alignment: Alignment.center,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                color: Colors.white,
+                                //문제가없어요//
+                                child: Text(
+                                  'Day$i',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ),
@@ -71,29 +82,28 @@ class _CreateTourState extends State<CreateTour> {
                   IconButton(
                     onPressed: _addDay,
                     icon: const Icon(
-                      Icons.add_circle_outline,
+                      Icons.add,
                       size: 16,
-                      color: Color.fromARGB(255, 0, 110, 200),
+                      color: Colors.black,
                     ),
                   ),
                 ],
               ),
             ),
-            const Divider(
-              thickness: 1.0,
-              color: Color.fromARGB(255, 10, 124, 218),
+            const SizedBox(
+              width: 386,
+              child: Divider(
+                thickness: 2.0,
+                color: Color.fromARGB(255, 187, 214, 255),
+              ),
             ),
             const SizedBox(height: 12),
-            Plan()
+            Plan(dayCount: dayCount),
           ],
         ),
       ),
     );
   }
-}
-
-void main() {
-  runApp(const CreateTour());
 }
 
 class TourName extends StatelessWidget {
