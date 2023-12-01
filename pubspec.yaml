@@ -33,7 +33,6 @@ dependencies:
     sdk: flutter
   flutter_secure_storage: ^5.0.3
   dio: ^4.0.6
-  fluttertoast: ^8.2.4
   provider: ^6.1.1
   geolocator: ^10.1.0
   sqflite: ^2.3.0

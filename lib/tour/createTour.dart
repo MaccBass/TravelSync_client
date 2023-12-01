@@ -92,10 +92,6 @@ class _CreateTourState extends State<CreateTour> {
   }
 }
 
-void main() {
-  runApp(const CreateTour());
-}
-
 class TourName extends StatelessWidget {
   const TourName({
     Key? key,

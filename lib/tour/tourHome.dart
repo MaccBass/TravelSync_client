@@ -24,9 +24,6 @@ class _TourHomeState extends State<TourHome> {
           // 사용자 입력을 가져옵니다
 
           // tourList에 새로운 일정을 추가합니다
-          setState(() {
-            tourList.add(myPlan);
-          });
         },
         child: const Icon(Icons.add),
       ),
