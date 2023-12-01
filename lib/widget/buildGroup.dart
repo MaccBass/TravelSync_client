@@ -1,13 +1,10 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:travelsync_client/models/group.dart';
-import 'package:travelsync_client/service/group_api.dart';
 import 'package:travelsync_client/widget/groupmainpage.dart';
 import 'package:travelsync_client/widgets/header.dart';
+import 'package:http/http.dart' as http;
 
 class BuildGroup extends StatefulWidget {
   const BuildGroup({super.key});
@@ -25,115 +22,166 @@ class BuildGroupState extends State<BuildGroup> {
   final TextEditingController groupPasswordController = TextEditingController();
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
-  late String userToken;
+
+  checkUserState() async {
+    userInfo = await storage.read(key: 'login');
+    if (userInfo == null) {
+      Navigator.pushNamed(context, '/'); // 로그인 페이지로 이동
+    }
+  }
 
   @override
   void initState() {
     super.initState();
 
+    // 비동기로 flutter secure storage 정보를 불러오는 작업
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
+      checkUserState();
     });
-  }
-
-  _asyncMethod() async {
-    // read 함수로 key값에 맞는 정보를 불러오고 데이터타입은 String 타입
-    // 데이터가 없을때는 null을 반환
-    userInfo = await storage.read(key: 'login');
-
-    // user의 정보가 있다면 로그인 후 들어가는 첫 페이지로 넘어가게 합니다.
-    if (userInfo != null) {
-      var info = jsonDecode(userInfo);
-    } else {
-      print('로그인이 필요합니다');
-    }
   }
 
   // 그룹 생성 버튼 누를시
   void createGroup() async {
     if (groupNameController.text.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "그룹명을 입력하세요.",
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("그룹명을 입력해주세요."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
       );
       return;
     }
     if (nationController.text.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "여행 국가를 입력하세요.",
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("여행 국가를 입력해주세요."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
       );
       return;
     }
     if (tourCompanyController.text.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "여행사를 입력하세요.",
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("여행사를 입력해주세요."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
       );
       return;
     }
     if (groupPasswordController.text.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "그룹 비밀번호를 입력하세요.",
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("그룹 비밀번호를 입력해주세요."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
       );
       return;
     }
     if (selectedStartDate.isAfter(selectedEndDate)) {
-      Fluttertoast.showToast(msg: "여행 시작일은 여행 종료일보다 나중이어야 합니다.");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            content: const Text("여행 종료일이 시작일보다 앞설 수 없습니다."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
     try {
-      var dio = Dio();
-      var param = {
-        'guide': "랙릉린",
-        'groupName': groupNameController.text,
-        'tourCompany': tourCompanyController.text,
-        'startDate': selectedStartDate.toIso8601String(),
-        'endDate': selectedEndDate.toIso8601String(),
-        'nation': nationController.text,
-        'groupPassword': groupPasswordController.text
+      var url = Uri.parse("http://34.83.150.5:8080/group/create");
+      Map<String, dynamic> data = {
+        "guide": "rack@reung.rin",
+        "groupName": groupNameController.text,
+        "tourCompany": tourCompanyController.text,
+        "startDate": selectedStartDate.toIso8601String(),
+        "endDate": selectedEndDate.toIso8601String(),
+        "nation": nationController.text,
+        "groupPassword": groupPasswordController.text
       };
-      Map<String, String> header = {
-        "Content-type": "application/json",
-        "Authorization": userToken,
-      };
-      var response = await dio.post('http://34.83.150.5:8080/group/create',
-          data: param, options: Options(headers: header));
+      var body = json.encode(data);
+      final response = await http.post(url,
+          headers: {
+            "accept": "*/*",
+            "Authorization":
+                "Bearer eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDY2MDQ5NzcsInN1YiI6InJhY2tAcmV1bmcucmluIiwidHlwZSI6IkFDQ0VTUyJ9.-Q7JmTOYySnLug9goV3bBFt2OOpyrwkf3FBVF8eSGnag75yZBy-g6pL8-KQwwn-kUJhv43wg2iTRUifFixi2sQ",
+            "Content-Type": "application/json"
+          },
+          body: body);
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: "그룹 생성 성공");
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: const Text("새로운 그룹을 생성했습니다."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("확인"),
-                  ),
-                ],
-              );
-            });
-        goGroupMainPage();
-      } else {
-        Fluttertoast.showToast(msg: "오류 발생");
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: const Text("그룹 생성 중 오류가 발생했습니다."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("확인"),
-                  ),
-                ],
-              );
-            });
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              content: const Text("그룹 생성 완료"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("닫기"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: "e");
-      return;
+      print("api오류.");
     }
   }
 
