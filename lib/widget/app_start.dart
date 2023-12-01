@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travelsync_client/widget/buildGroup.dart';
-import 'package:travelsync_client/widget/join.dart';
-import 'package:travelsync_client/widget/login_page.dart';
+import 'package:travelsync_client/widget/loginpage.dart';
 import 'package:travelsync_client/widget/mainloading.dart';
 
 class AppStart extends StatelessWidget {
@@ -10,7 +8,7 @@ class AppStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: BuildGroup(),
+      home: SplashScreen(),
     );
   }
 }
@@ -30,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const StartingPage(),
+          builder: (context) => const Loginpage(),
         ),
       );
     });
