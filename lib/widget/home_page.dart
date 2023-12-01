@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:travelsync_client/logo/airplaneLogo.dart';
+import 'package:travelsync_client/tour/Tour.dart';
 import 'package:travelsync_client/widget/settings_page.dart'; // flutter_secure_storage 패키지
 
 class HomePage extends StatefulWidget {
@@ -48,28 +50,13 @@ class _HomePageState extends State<HomePage> {
               tooltip: 'settings',
               color: Colors.black,
               iconSize: 40,
-            )
+            ),
           ],
         ),
         backgroundColor: const Color(0xFFF5FBFF),
         body: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 150,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image:
-                          AssetImage('assets/images/airplane_travelsync.png'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            const airplaneLogo(),
             Container(
               height: 15,
             ),
@@ -147,11 +134,7 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () {
                 // 버튼이 눌리면 다른 페이지로 이동
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                  //const SettingsPage() 대신에 투어 생성하기 누르면 연결되는 페이지로
-                );
+                Navigator.pushNamed(context, '/main/tour');
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(280, 45),

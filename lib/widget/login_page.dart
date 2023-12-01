@@ -4,6 +4,8 @@ import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
 
 import 'package:travelsync_client/models/model.dart';
+import 'package:travelsync_client/tour/Tour.dart';
+import 'package:travelsync_client/tour/createTour.dart';
 import 'package:travelsync_client/widget/home_page.dart';
 import 'package:travelsync_client/widget/join.dart';
 import 'package:travelsync_client/widget/login_widget_group.dart';
@@ -19,6 +21,9 @@ class StartingPage extends StatelessWidget {
       routes: {
         '/join': (context) => const JoinPage(),
         '/main': (context) => const HomePage(),
+        '/main/tour': (context) => const Tour(),
+        '/main/tour/createTour': (context) => const CreateTour(),
+        '/main/group': (context) => const Tour(),
         '/main/settings': (context) => const SettingsPage(),
       },
       home: const LoginPage(),
