@@ -42,7 +42,7 @@ class _CreateTourState extends State<CreateTour> {
             },
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF5FBFF),
         body: Column(
           children: [
             const SingleChildScrollView(),

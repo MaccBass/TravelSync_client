@@ -156,11 +156,7 @@ class _HomePageState extends State<HomePage> {
             ElevatedButton(
               onPressed: () {
                 // 버튼이 눌리면 다른 페이지로 이동
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                  //const SettingsPage() 대신에 그룹 생성하기 누르면 연결되는 페이지로
-                );
+                Navigator.pushNamed(context, '/main/group');
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(280, 45),

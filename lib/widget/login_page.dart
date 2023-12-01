@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart'; // DIO 패키지로 HTTP 통신
 import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
+import 'package:travelsync_client/group/group_create_page.dart';
 
 import 'package:travelsync_client/models/model.dart';
 import 'package:travelsync_client/tour/Tour.dart';
@@ -23,7 +24,7 @@ class StartingPage extends StatelessWidget {
         '/main': (context) => const HomePage(),
         '/main/tour': (context) => const Tour(),
         '/main/tour/createTour': (context) => const CreateTour(),
-        '/main/group': (context) => const Tour(),
+        '/main/group': (context) => const GroupCreatePage(),
         '/main/settings': (context) => const SettingsPage(),
       },
       home: const LoginPage(),
