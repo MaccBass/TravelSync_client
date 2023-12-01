@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'dart:convert'; // JSON Encode, Decode를 위한 패키지
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // flutter_secure_storage 패키지
 
-class ServicePage extends StatefulWidget {
-  const ServicePage({Key? key}) : super(key: key);
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<ServicePage> createState() => _ServicePageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _ServicePageState extends State<ServicePage> {
+class _SettingsPageState extends State<SettingsPage> {
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
 
@@ -21,10 +21,7 @@ class _ServicePageState extends State<ServicePage> {
   checkUserState() async {
     userInfo = await storage.read(key: 'login');
     if (userInfo == null) {
-      print('로그인 페이지로 이동');
       Navigator.pushNamed(context, '/'); // 로그인 페이지로 이동
-    } else {
-      print('로그인 중');
     }
   }
 
@@ -40,18 +37,23 @@ class _ServicePageState extends State<ServicePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Main'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'logout',
-            onPressed: () {
-              logout();
-            },
-          ),
-        ],
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              tooltip: 'logout',
+              color: Colors.black,
+              onPressed: () {
+                logout();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
