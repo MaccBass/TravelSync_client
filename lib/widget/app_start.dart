@@ -10,7 +10,11 @@ class AppStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+<<<<<<< HEAD
       home: BuildGroup(),
+=======
+      home: SplashScreen(),
+>>>>>>> parent of 2c6e2d0 (Merge branch 'main' into ish)
     );
   }
 }
